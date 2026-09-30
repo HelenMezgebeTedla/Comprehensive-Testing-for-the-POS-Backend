@@ -1,26 +1,28 @@
-from uuid import UUID
 from decimal import Decimal
+from uuid import UUID
+
 from pydantic import BaseModel, ConfigDict
-from typing import Optional
+
 
 class SaleItemBase(BaseModel):
     sale_id: UUID
     product_id: UUID
     quantity: int
     unit_price: Decimal
-    discount_amount: Optional [Decimal]= None
+    discount_amount: Decimal | None = None
     total_price: Decimal
-    
+
 
 class SaleItemCreate(SaleItemBase):
     pass
 
+
 class SaleItemUpdate(BaseModel):
-    quantity: Optional [int] = None
-    unit_price: Optional [Decimal]= None
-    discount_amount: Optional [Decimal]= None
-    total_price: Optional [Decimal]= None
-    
+    quantity: int | None = None
+    unit_price: Decimal | None = None
+    discount_amount: Decimal | None = None
+    total_price: Decimal | None = None
+
 
 class SaleItemRead(SaleItemBase):
     model_config = ConfigDict(from_attributes=True)

@@ -3,11 +3,11 @@ from uuid import UUID
 from fastapi import APIRouter, Depends, status
 from sqlalchemy.orm import Session
 
+from app.models.user import UserRole
+from app.schemas.user import UserCreate, UserRead, UserUpdate
+from app.services import user as user_service
 from database import get_db
 from dependencies import require_roles
-from app.models.user import UserRole
-from app.schemas.user import UserUpdate, UserCreate, UserRead
-from app.services import user as user_service
 
 router = APIRouter(
     prefix="/user",
@@ -32,9 +32,7 @@ def create_user(data: UserCreate, db: Session = Depends(get_db)):
 
 
 @router.put("/{user_id}", response_model=UserRead)
-def update_user(
-    user_id: UUID, data: UserUpdate, db: Session = Depends(get_db)
-):
+def update_user(user_id: UUID, data: UserUpdate, db: Session = Depends(get_db)):
     return user_service.update_user(db, user_id, data)
 
 

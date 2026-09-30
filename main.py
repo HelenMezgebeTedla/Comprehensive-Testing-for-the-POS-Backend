@@ -3,20 +3,21 @@ from dotenv import load_dotenv
 load_dotenv()
 
 from fastapi import FastAPI
-from database import Base, engine
+
 import app.models
+from database import Base, engine
 
 Base.metadata.create_all(bind=engine)
 
-from app.routers import ( 
-    auth,                  
+from app.routers import (
+    auth,
     category,
     customer,
     payment,
     product,
     receipt,
-    sale_item,
     sale,
+    sale_item,
     supplier,
     user,
 )
@@ -33,6 +34,7 @@ app.include_router(sale.router)
 app.include_router(supplier.router)
 app.include_router(user.router)
 app.include_router(auth.router)
+
 
 @app.get("/")
 def root():

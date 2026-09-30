@@ -1,28 +1,31 @@
-from datetime import datetime
-from typing import Optional
 from uuid import UUID
-from pydantic import ConfigDict, BaseModel
 
-class SupplierBase( BaseModel):
+from pydantic import BaseModel, ConfigDict
+
+
+class SupplierBase(BaseModel):
     company_name: str
-    contact_name: Optional [str]= None
-    email: Optional[str] = "user@gmail.com"
-    supplier_phone: Optional [str]= None
-    address: Optional [str]= None
-    is_active: Optional [bool] = None
-    
+    contact_name: str | None = None
+    email: str | None = "user@gmail.com"
+    supplier_phone: str | None = None
+    address: str | None = None
+    is_active: bool | None = None
+
+
 class SupplierCreate(SupplierBase):
     pass
 
-class SupplierUpdate( BaseModel):
-    company_name: Optional [str]= None
-    contact_name: Optional [str]= None
-    email:Optional [str]= None
-    supplier_phone: Optional [str]= None
-    address: Optional [str]= None
-    is_active: Optional [bool] = True
-    
+
+class SupplierUpdate(BaseModel):
+    company_name: str | None = None
+    contact_name: str | None = None
+    email: str | None = None
+    supplier_phone: str | None = None
+    address: str | None = None
+    is_active: bool | None = True
+
+
 class SupplierRead(SupplierBase):
     model_config = ConfigDict(from_attributes=True)
-    
+
     supplier_id: UUID

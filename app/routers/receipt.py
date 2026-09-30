@@ -3,11 +3,11 @@ from uuid import UUID
 from fastapi import APIRouter, Depends, status
 from sqlalchemy.orm import Session
 
+from app.models.user import UserRole
+from app.schemas.receipt import ReceiptCreate, ReceiptRead, ReceiptUpdate
+from app.services import receipt as receipt_service
 from database import get_db
 from dependencies import get_current_user, require_roles
-from app.models.user import UserRole
-from app.schemas.receipt import ReceiptUpdate, ReceiptCreate, ReceiptRead
-from app.services import receipt as receipt_service
 
 router = APIRouter(
     prefix="/receipt",

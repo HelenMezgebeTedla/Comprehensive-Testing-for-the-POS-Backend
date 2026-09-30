@@ -1,7 +1,9 @@
 from fastapi.testclient import TestClient
+
 from main import app
 
 client = TestClient(app)
+
 
 def test_create_payment_success(
     client,
@@ -15,7 +17,7 @@ def test_create_payment_success(
             "amount": "11.60",
             "payment_method": "cash",
             "status": "completed",
-            "payment_date": "2026-09-20T10:00:00Z"
+            "payment_date": "2026-09-20T10:00:00Z",
         },
         headers=auth_headers,
     )
@@ -120,10 +122,7 @@ def test_list_payments(
 
     payments = response.json()
 
-    payment_ids = [
-        item["payment_id"]
-        for item in payments
-    ]
+    payment_ids = [item["payment_id"] for item in payments]
 
     assert payment["payment_id"] in payment_ids
 

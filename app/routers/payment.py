@@ -3,11 +3,11 @@ from uuid import UUID
 from fastapi import APIRouter, Depends, status
 from sqlalchemy.orm import Session
 
+from app.models.user import UserRole
+from app.schemas.payment import PaymentCreate, PaymentRead, PaymentUpdate
+from app.services import payment as payment_service
 from database import get_db
 from dependencies import get_current_user, require_roles
-from app.models.user import UserRole
-from app.schemas.payment import PaymentUpdate, PaymentCreate, PaymentRead
-from app.services import payment as payment_service
 
 router = APIRouter(
     prefix="/payment",
@@ -37,7 +37,9 @@ def create_payment(data: PaymentCreate, db: Session = Depends(get_db)):
 
 
 @router.put("/{payment_id}", response_model=PaymentRead)
-def update_payment(payment_id: UUID, data: PaymentUpdate, db: Session = Depends(get_db)):
+def update_payment(
+    payment_id: UUID, data: PaymentUpdate, db: Session = Depends(get_db)
+):
     return payment_service.update_payment(db, payment_id, data)
 
 

@@ -3,11 +3,11 @@ from uuid import UUID
 from fastapi import APIRouter, Depends, status
 from sqlalchemy.orm import Session
 
+from app.models.user import UserRole
+from app.schemas.sale_item import SaleItemCreate, SaleItemRead, SaleItemUpdate
+from app.services import sale_item as sale_item_service
 from database import get_db
 from dependencies import get_current_user, require_roles
-from app.models.user import UserRole
-from app.schemas.sale_item import SaleItemUpdate, SaleItemCreate, SaleItemRead
-from app.services import sale_item as sale_item_service
 
 router = APIRouter(
     prefix="/sale-item",

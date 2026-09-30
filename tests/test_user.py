@@ -1,7 +1,9 @@
 from fastapi.testclient import TestClient
+
 from main import app
 
 client = TestClient(app)
+
 
 def test_create_user_success(client, auth_headers):
     response = client.post(
@@ -28,7 +30,7 @@ def test_create_user_success(client, auth_headers):
     assert body["email"] == "newuser@example.com"
     assert body["role"] == "cashier"
     assert body["is_active"] is True
-    
+
     assert "password" not in body
     assert "hashed_password" not in body
 
@@ -133,9 +135,7 @@ def test_get_user_success(client, auth_headers, test_user):
     users = response.json()
 
     created_user = next(
-        user
-        for user in users
-        if user["username"] == test_user["username"]
+        user for user in users if user["username"] == test_user["username"]
     )
 
     user_id = created_user["user_id"]
@@ -186,11 +186,7 @@ def test_update_user_success(client, auth_headers, test_user):
 
     users = users_response.json()
 
-    user = next(
-        user
-        for user in users
-        if user["username"] == test_user["username"]
-    )
+    user = next(user for user in users if user["username"] == test_user["username"])
 
     user_id = user["user_id"]
 
@@ -219,11 +215,7 @@ def test_update_user_email(client, auth_headers, test_user):
 
     users = users_response.json()
 
-    user = next(
-        user
-        for user in users
-        if user["username"] == test_user["username"]
-    )
+    user = next(user for user in users if user["username"] == test_user["username"])
 
     user_id = user["user_id"]
 

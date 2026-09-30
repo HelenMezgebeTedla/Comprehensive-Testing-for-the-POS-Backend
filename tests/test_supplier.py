@@ -1,7 +1,9 @@
 from fastapi.testclient import TestClient
+
 from main import app
 
 client = TestClient(app)
+
 
 def test_create_supplier_success(client, auth_headers):
     response = client.post(
@@ -104,10 +106,7 @@ def test_list_suppliers(client, auth_headers, supplier):
 
     suppliers = response.json()
 
-    supplier_ids = [
-        item["supplier_id"]
-        for item in suppliers
-    ]
+    supplier_ids = [item["supplier_id"] for item in suppliers]
 
     assert supplier["supplier_id"] in supplier_ids
 
@@ -135,6 +134,7 @@ def test_get_supplier_not_found(client, auth_headers):
     )
 
     assert response.status_code == 404
+
 
 def test_get_supplier_malformed_uuid_is_validation_error(
     client,

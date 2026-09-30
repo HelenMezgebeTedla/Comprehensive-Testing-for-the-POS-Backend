@@ -1,7 +1,9 @@
 from fastapi.testclient import TestClient
+
 from main import app
 
 client = TestClient(app)
+
 
 def test_create_product_success(client, auth_headers, category, supplier):
     response = client.post(
@@ -90,9 +92,7 @@ def test_update_product_with_uuid_fk_change(client, auth_headers, product, categ
 
 
 def test_delete_product_as_manager_succeeds(client, auth_headers, product):
-    response = client.delete(
-        f"/product/{product['product_id']}", headers=auth_headers
-    )
+    response = client.delete(f"/product/{product['product_id']}", headers=auth_headers)
     assert response.status_code == 204
 
 

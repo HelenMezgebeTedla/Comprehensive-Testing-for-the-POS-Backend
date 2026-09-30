@@ -1,7 +1,9 @@
 from fastapi.testclient import TestClient
+
 from main import app
 
 client = TestClient(app)
+
 
 def test_create_customer_success(
     client,
@@ -99,10 +101,7 @@ def test_list_customers(
 
     customers = response.json()
 
-    customer_ids = [
-        item["customer_id"]
-        for item in customers
-    ]
+    customer_ids = [item["customer_id"] for item in customers]
 
     assert customer["customer_id"] in customer_ids
 

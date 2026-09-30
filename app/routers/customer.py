@@ -1,10 +1,12 @@
+from uuid import UUID
+
 from fastapi import APIRouter, Depends, status
 from sqlalchemy.orm import Session
 
-from database import get_db
-from app.schemas.customer import CustomerUpdate, CustomerCreate, CustomerRead
+from app.schemas.customer import CustomerCreate, CustomerRead, CustomerUpdate
 from app.services import customer as customer_service
-from uuid import UUID
+from database import get_db
+
 router = APIRouter(prefix="/customer", tags=["Customer"])
 
 
@@ -24,7 +26,8 @@ def create_customer(data: CustomerCreate, db: Session = Depends(get_db)):
 
 
 @router.put("/{customer_id}", response_model=CustomerRead)
-def update_customer(customer_id: UUID, data: CustomerUpdate, db: Session = Depends(get_db)
+def update_customer(
+    customer_id: UUID, data: CustomerUpdate, db: Session = Depends(get_db)
 ):
     return customer_service.update_customer(db, customer_id, data)
 

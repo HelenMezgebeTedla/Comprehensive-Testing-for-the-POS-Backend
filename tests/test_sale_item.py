@@ -1,7 +1,9 @@
 from fastapi.testclient import TestClient
+
 from main import app
 
 client = TestClient(app)
+
 
 def test_create_sale_item_success(
     client,
@@ -73,7 +75,7 @@ def test_create_sale_item_missing_required_field_is_validation_error(
             "product_id": product["product_id"],
             "quantity": 2,
             "unit_price": "1.50",
-            },
+        },
         headers=auth_headers,
     )
 
@@ -155,10 +157,7 @@ def test_list_sale_items(
 
     sale_items = response.json()
 
-    sale_item_ids = [
-        item["sale_item_id"]
-        for item in sale_items
-    ]
+    sale_item_ids = [item["sale_item_id"] for item in sale_items]
 
     assert sale_item["sale_item_id"] in sale_item_ids
 

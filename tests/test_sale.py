@@ -1,6 +1,5 @@
-from urllib import response
-
 from fastapi.testclient import TestClient
+
 from main import app
 
 client = TestClient(app)
@@ -18,11 +17,7 @@ def get_test_user_id(client, auth_headers, username):
 
     users = response.json()
 
-    user = next(
-        user
-        for user in users
-        if user["username"] == username
-    )
+    user = next(user for user in users if user["username"] == username)
 
     return user["user_id"]
 
@@ -166,10 +161,7 @@ def test_list_sales(
 
     sales = response.json()
 
-    sale_ids = [
-        item["sale_id"]
-        for item in sales
-    ]
+    sale_ids = [item["sale_id"] for item in sales]
 
     assert sale["sale_id"] in sale_ids
 
@@ -292,6 +284,8 @@ def test_update_sale_not_found(
     )
 
     assert response.status_code == 404
+
+
 def test_delete_sale_success(
     client,
     auth_headers,

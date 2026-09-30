@@ -1,7 +1,9 @@
 from fastapi.testclient import TestClient
+
 from main import app
 
 client = TestClient(app)
+
 
 def test_create_category_success(
     client,
@@ -88,10 +90,7 @@ def test_list_categories(
 
     categories = response.json()
 
-    category_ids = [
-        item["category_id"]
-        for item in categories
-    ]
+    category_ids = [item["category_id"] for item in categories]
 
     assert category["category_id"] in category_ids
 

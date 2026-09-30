@@ -3,11 +3,11 @@ from uuid import UUID
 from fastapi import APIRouter, Depends, status
 from sqlalchemy.orm import Session
 
+from app.models.user import UserRole
+from app.schemas.sale import SalesCreate, SalesRead, SalesUpdate
+from app.services import sale as sale_service
 from database import get_db
 from dependencies import get_current_user, require_roles
-from app.models.user import UserRole
-from app.schemas.sale import SalesUpdate, SalesCreate, SalesRead
-from app.services import sale as sale_service
 
 router = APIRouter(
     prefix="/sale",
@@ -32,9 +32,7 @@ def create_sale(data: SalesCreate, db: Session = Depends(get_db)):
 
 
 @router.put("/{sale_id}", response_model=SalesRead)
-def update_sale(
-    sale_id: UUID, data: SalesUpdate, db: Session = Depends(get_db)
-):
+def update_sale(sale_id: UUID, data: SalesUpdate, db: Session = Depends(get_db)):
     return sale_service.update_sale(db, sale_id, data)
 
 

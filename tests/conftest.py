@@ -23,6 +23,7 @@ TestingSessionLocal = sessionmaker(
     bind=engine,
 )
 
+
 @pytest.fixture(autouse=True)
 def setup_database():
     Base.metadata.create_all(bind=engine)
@@ -30,6 +31,7 @@ def setup_database():
     yield
 
     Base.metadata.drop_all(bind=engine)
+
 
 @pytest.fixture
 def db_session():
@@ -39,6 +41,7 @@ def db_session():
         yield db
     finally:
         db.close()
+
 
 @pytest.fixture
 def client(db_session):
@@ -51,6 +54,7 @@ def client(db_session):
         yield test_client
 
     app.dependency_overrides.clear()
+
 
 @pytest.fixture
 def test_user(client):
@@ -66,11 +70,10 @@ def test_user(client):
 
     response = client.post("/auth/register", json=user_data)
 
-    assert response.status_code == 201, (
-        f"Registration failed: {response.text}"
-    )
+    assert response.status_code == 201, f"Registration failed: {response.text}"
 
     return user_data
+
 
 @pytest.fixture
 def manager_user(client):
@@ -89,11 +92,10 @@ def manager_user(client):
         json=user_data,
     )
 
-    assert response.status_code == 201, (
-        f"Manager registration failed: {response.text}"
-    )
+    assert response.status_code == 201, f"Manager registration failed: {response.text}"
 
     return user_data
+
 
 @pytest.fixture
 def cashier_user(client):
@@ -112,9 +114,7 @@ def cashier_user(client):
         json=user_data,
     )
 
-    assert response.status_code == 201, (
-        f"Cashier registration failed: {response.text}"
-    )
+    assert response.status_code == 201, f"Cashier registration failed: {response.text}"
 
     return user_data
 
@@ -129,15 +129,11 @@ def auth_header(client, test_user):
         },
     )
 
-    assert response.status_code == 200, (
-        f"Login failed: {response.text}"
-    )
+    assert response.status_code == 200, f"Login failed: {response.text}"
 
     token = response.json()["access_token"]
 
-    return {
-        "Authorization": f"Bearer {token}"
-    }
+    return {"Authorization": f"Bearer {token}"}
 
 
 @pytest.fixture
@@ -150,15 +146,12 @@ def manager_auth_header(client, manager_user):
         },
     )
 
-    assert response.status_code == 200, (
-        f"Manager login failed: {response.text}"
-    )
+    assert response.status_code == 200, f"Manager login failed: {response.text}"
 
     token = response.json()["access_token"]
 
-    return {
-        "Authorization": f"Bearer {token}"
-    }
+    return {"Authorization": f"Bearer {token}"}
+
 
 @pytest.fixture
 def cashier_auth_header(client, cashier_user):
@@ -170,20 +163,18 @@ def cashier_auth_header(client, cashier_user):
         },
     )
 
-    assert response.status_code == 200, (
-        f"Cashier login failed: {response.text}"
-    )
+    assert response.status_code == 200, f"Cashier login failed: {response.text}"
 
     token = response.json()["access_token"]
 
-    return {
-        "Authorization": f"Bearer {token}"
-    }
+    return {"Authorization": f"Bearer {token}"}
 
 
 @pytest.fixture
 def auth_headers(auth_header):
     return auth_header
+
+
 @pytest.fixture
 def product(client, auth_headers):
     response = client.post(
@@ -198,11 +189,11 @@ def product(client, auth_headers):
         headers=auth_headers,
     )
 
-    assert response.status_code == 201, (
-        f"Product creation failed: {response.text}"
-    )
+    assert response.status_code == 201, f"Product creation failed: {response.text}"
 
     return response.json()
+
+
 @pytest.fixture
 def sale_item(client, auth_headers, sale, product):
     response = client.post(
@@ -218,11 +209,10 @@ def sale_item(client, auth_headers, sale, product):
         headers=auth_headers,
     )
 
-    assert response.status_code == 201, (
-        f"Sale item creation failed: {response.text}"
-    )
+    assert response.status_code == 201, f"Sale item creation failed: {response.text}"
 
     return response.json()
+
 
 @pytest.fixture
 def category(client, auth_headers):
@@ -236,11 +226,10 @@ def category(client, auth_headers):
         headers=auth_headers,
     )
 
-    assert response.status_code == 201, (
-        f"Category creation failed: {response.text}"
-    )
+    assert response.status_code == 201, f"Category creation failed: {response.text}"
 
     return response.json()
+
 
 @pytest.fixture
 def customer(client, auth_headers):
@@ -256,11 +245,11 @@ def customer(client, auth_headers):
         headers=auth_headers,
     )
 
-    assert response.status_code == 201, (
-        f"Customer creation failed: {response.text}"
-    )
+    assert response.status_code == 201, f"Customer creation failed: {response.text}"
 
     return response.json()
+
+
 @pytest.fixture
 def sale(client, auth_headers, customer):
     response = client.get(
@@ -268,17 +257,11 @@ def sale(client, auth_headers, customer):
         headers=auth_headers,
     )
 
-    assert response.status_code == 200, (
-        f"User lookup failed: {response.text}"
-    )
+    assert response.status_code == 200, f"User lookup failed: {response.text}"
 
     users = response.json()
 
-    user = next(
-        user
-        for user in users
-        if user["username"] == "testuser"
-    )
+    user = next(user for user in users if user["username"] == "testuser")
 
     response = client.post(
         "/sale/",
@@ -295,12 +278,10 @@ def sale(client, auth_headers, customer):
         headers=auth_headers,
     )
 
-    assert response.status_code == 201, (
-        f"Sale creation failed: {response.text}"
-    )
-    
+    assert response.status_code == 201, f"Sale creation failed: {response.text}"
 
     return response.json()
+
 
 @pytest.fixture
 def payment(client, auth_headers, sale):
@@ -316,11 +297,11 @@ def payment(client, auth_headers, sale):
         headers=auth_headers,
     )
 
-    assert response.status_code == 201, (
-        f"Payment creation failed: {response.text}"
-    )
+    assert response.status_code == 201, f"Payment creation failed: {response.text}"
 
     return response.json()
+
+
 @pytest.fixture
 def supplier(client, auth_headers):
     response = client.post(
@@ -338,6 +319,7 @@ def supplier(client, auth_headers):
     assert response.status_code == 201, f"Supplier creation failed: {response.text}"
     return response.json()
 
+
 @pytest.fixture
 def receipt(client, auth_headers, sale):
     response = client.post(
@@ -351,8 +333,6 @@ def receipt(client, auth_headers, sale):
         headers=auth_headers,
     )
 
-    assert response.status_code == 201, (
-        f"Receipt creation failed: {response.text}"
-    )
+    assert response.status_code == 201, f"Receipt creation failed: {response.text}"
 
     return response.json()

@@ -1,7 +1,9 @@
 from fastapi.testclient import TestClient
+
 from main import app
 
 client = TestClient(app)
+
 
 def test_create_receipt_success(
     client,
@@ -9,15 +11,15 @@ def test_create_receipt_success(
     sale,
 ):
     response = client.post(
-    "/receipt/",
-    json={
-        "sale_id": sale["sale_id"],
-        "receipt_number": "REC-0001",
-        "receipt_type": "sales_receipt",
-        "receipt_data": "Test receipt",
-    },
-    headers=auth_headers,
-)
+        "/receipt/",
+        json={
+            "sale_id": sale["sale_id"],
+            "receipt_number": "REC-0001",
+            "receipt_type": "sales_receipt",
+            "receipt_data": "Test receipt",
+        },
+        headers=auth_headers,
+    )
     assert response.status_code == 201
 
     body = response.json()
@@ -68,10 +70,7 @@ def test_list_receipts(
 
     receipts = response.json()
 
-    receipt_ids = [
-        item["receipt_id"]
-        for item in receipts
-    ]
+    receipt_ids = [item["receipt_id"] for item in receipts]
 
     assert receipt["receipt_id"] in receipt_ids
 

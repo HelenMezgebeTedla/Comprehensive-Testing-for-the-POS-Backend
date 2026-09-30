@@ -55,7 +55,7 @@ def get_user_from_token(db: Session, token: str):
         user_id = uuid.UUID(subject)
     except HTTPException:
         raise
-    except Exception:
+    except (ValueError, TypeError):
         raise credential_error
 
     user = user_repository.get_by_id(db, user_id)
